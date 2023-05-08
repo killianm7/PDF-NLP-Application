@@ -26,11 +26,12 @@ def test_extract_keywords_memory_usage():
     # Start tracking memory usage
     tracemalloc.start()
 
-    # Call the function you want to test
     keywords = extract_keywords(sample_text)
 
     # Check memory usage
     current_size, peak_size = tracemalloc.get_traced_memory()
     tracemalloc.stop()
+
     threshold = 50000
+    
     assert current_size < threshold, f"Memory usage {current_size} bytes exceeded the threshold {threshold} bytes"    
