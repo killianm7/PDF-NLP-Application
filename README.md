@@ -5,13 +5,16 @@ The PDF NLP Application is a web-based tool for processing and analyzing PDF doc
 ## Table of Contents
 
 - [Features](#features)
+- [User Stories](#user-stories)
 - [APIs](#apis)
 - [Architecture](#architecture)
 - [Installation](#installation)
   - [Docker](#docker)
   - [Manual Installation](#manual-installation)
 - [Usage](#usage)
+  - [Storage Capabilities](#storage-capabilities)
 - [Tests](#tests)
+- [Future](#future)
 
 ## Features
 
@@ -72,6 +75,45 @@ To manually install and run the application, follow these steps:
 5. Enter a word in the 'Word:' input field and click 'Get word info' to display the count and ranking of the word within the document.
 6. Use the arrow buttons to navigate through sentences containing the searched word.
 
+### Storage Capabilities
+
+This application uses MongoDB as its database to store user information, including email addresses and hashed passwords. When a user signs up, their email and password are stored securely in the database, allowing them to log in to their account later. The hashed password ensures that even if the database is compromised, the attacker would not have direct access to the user's plaintext password.
+
+During the login process, the entered password is hashed and compared with the stored hashed password to confirm the user's identity. This ensures that users can securely access their accounts and view their uploaded documents and extracted data.
+
+To further enhance security, Flask sessions are used to maintain user authentication state. This ensures that only logged-in users can access their documents and prevents unauthorized access.
+
+In addition, Document Sentiments are stored in the MongoDB to provide text analysis functionality.
+
 ## Tests
 
-To run the tests for the application, follow these steps
+To run the tests for this application, follow these steps:
+
+1. Ensure that you have `pytest` installed. If it's not already installed, you can install it using pip:
+
+```bash
+pip install pytest
+```
+
+2. Utilize the file `test_FileHandler.py` to run tests on `FileHandler.py`. You can add more tests to the `test_FileHandler.py` file as needed to cover other functions and scenarios in your `FileHandler.py` code.
+
+3. To run the tests, open a terminal/command prompt, navigate to your project directory, and run this command:
+
+```bash
+pytest
+
+# OR
+
+pytest test_FileHandler.py
+```
+
+## Future
+
+The following are to be implemented to improve the application:
+- Logout functionality on all pages
+- Display name associated to account
+- Add a tab to locate previously uploaded files and to securely delete files of choice
+- Improve UI
+- Notifications (e.g. Login Successful, File Uploaded Successful)
+- Incorporate GPT to provide summaries on text
+- P2P function to share files with other users
