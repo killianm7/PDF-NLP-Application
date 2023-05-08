@@ -5,12 +5,14 @@ The PDF NLP Application is a web-based tool for processing and analyzing PDF doc
 ## Table of Contents
 
 - [Features](#features)
+- [User Stories](#user-stories)
 - [APIs](#apis)
 - [Architecture](#architecture)
 - [Installation](#installation)
   - [Docker](#docker)
   - [Manual Installation](#manual-installation)
 - [Usage](#usage)
+  - [Storage Capabilities](#storage-capabilities)
 - [Tests](#tests)
 
 ## Features
@@ -71,6 +73,14 @@ To manually install and run the application, follow these steps:
 4. Use the 'Toggle Keywords' button to display a table of keywords sorted by their rank of occurrences.
 5. Enter a word in the 'Word:' input field and click 'Get word info' to display the count and ranking of the word within the document.
 6. Use the arrow buttons to navigate through sentences containing the searched word.
+
+### Storage Capabilities
+
+This application uses MongoDB as its database to store user information, including email addresses and hashed passwords. When a user signs up, their email and password are stored securely in the database, allowing them to log in to their account later. The hashed password ensures that even if the database is compromised, the attacker would not have direct access to the user's plaintext password.
+
+During the login process, the entered password is hashed and compared with the stored hashed password to confirm the user's identity. This ensures that users can securely access their accounts and view their uploaded documents and extracted data.
+
+To further enhance security, Flask sessions are used to maintain user authentication state. This ensures that only logged-in users can access their documents and prevents unauthorized access.
 
 ## Tests
 
