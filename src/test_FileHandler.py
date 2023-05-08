@@ -1,6 +1,7 @@
 import pytest
 import os
 from FileHandler import extract_keywords, extract_paragraphs
+import tracemalloc
 
 # Test data
 sample_text = """This is a sample text for testing purposes.
@@ -18,3 +19,18 @@ def test_extract_paragraphs():
     assert len(paragraphs) == 2, f"Expected 2 paragraphs, but got {len(paragraphs)}"
     assert paragraphs[0] == "This is a sample text for testing purposes.", f"Expected 'This is a sample text for testing purposes.', but got '{paragraphs[0]}'"
     assert paragraphs[1] == "It contains two paragraphs, and it's meant to test the extract_paragraphs function.", f"Expected 'It contains two paragraphs, and it's meant to test the extract_paragraphs function.', but got '{paragraphs[1]}'"
+
+
+
+def test_extract_keywords_memory_usage():
+    # Start tracking memory usage
+    tracemalloc.start()
+
+    # Call the function you want to test
+    keywords = extract_keywords(sample_text)
+
+    # Check memory usage
+    current_size, peak_size = tracemalloc.get_traced_memory()
+    tracemalloc.stop()
+    threshold = 50000
+    assert current_size < threshold, f"Memory usage {current_size} bytes exceeded the threshold {threshold} bytes"    
