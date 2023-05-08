@@ -14,6 +14,7 @@ The PDF NLP Application is a web-based tool for processing and analyzing PDF doc
 - [Usage](#usage)
   - [Storage Capabilities](#storage-capabilities)
 - [Tests](#tests)
+- [Demo](#Demo)
 - [Future](#future)
 
 ## Features
@@ -106,6 +107,10 @@ pytest
 
 pytest test_FileHandler.py
 ```
+
+## Demo
+
+https://user-images.githubusercontent.com/91902800/236768165-6ec05a71-1753-4949-a1b7-05b34494b472.mp4
 
 ## Future
 
