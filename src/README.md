@@ -14,6 +14,7 @@ The PDF NLP Application is a web-based tool for processing and analyzing PDF doc
 - [Usage](#usage)
   - [Storage Capabilities](#storage-capabilities)
 - [Tests](#tests)
+- [Future](#future)
 
 ## Features
 
@@ -82,6 +83,8 @@ During the login process, the entered password is hashed and compared with the s
 
 To further enhance security, Flask sessions are used to maintain user authentication state. This ensures that only logged-in users can access their documents and prevents unauthorized access.
 
+In addition, Document Sentiments are stored in the MongoDB to provide text analysis functionality.
+
 ## Tests
 
 To run the tests for this application, follow these steps:
@@ -103,3 +106,14 @@ pytest
 
 pytest test_FileHandler.py
 ```
+
+## Future
+
+The following are to be implemented to improve the application:
+- Logout functionality on all pages
+- Display name associated to account
+- Add a tab to locate previously uploaded files and to securely delete files of choice
+- Improve UI
+- Notifications (e.g. Login Successful, File Uploaded Successful)
+- Incorporate GPT to provide summaries on text
+- P2P function to share files with other users
