@@ -213,6 +213,23 @@ def handleUpload():
 
     return redirect(url_for('upload'))
 
+@app.route('/my_files')
+def my_files():
+    if 'logged_in' in session and session['logged_in']:
+        # Get the user's email from the session
+        email = session['email']
+        
+        # Query the MongoDB database to get all the files uploaded by this user
+        db = client["PDFdb"]
+        keywords_collection = db["Keywords"]
+        files = list(keywords_collection.find({"Email": email}))
+
+        # Render a template showing the list of files
+        return render_template('my_files.html', files=files)
+    else:
+        flash('Please log in to access this page')
+        return redirect(url_for('login'))
+
 @app.route('/search_keyword', methods=['POST'])
 def search_keyword():
     keyword = request.form['keyword'].lower()
