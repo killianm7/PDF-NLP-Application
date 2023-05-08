@@ -74,4 +74,20 @@ To manually install and run the application, follow these steps:
 
 ## Tests
 
-To run the tests for the application, follow these steps
+To run the tests for this application, follow these steps:
+
+1. Ensure that you have `pytest` installed. If it's not already installed, you can install it using pip:
+
+```bash
+pip install pytest
+
+2. Utilize the file `test_FileHandler.py` to run tests on `FileHandler.py`. You can add more tests to the `test_FileHandler.py` file as needed to cover other functions and scenarios in your `FileHandler.py` code.
+
+3. To run the tests, open a terminal/command prompt, navigate to your project directory, and run this command:
+
+```bash
+pytest
+
+# OR
+
+pytest test_FileHandler.py
