@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document Sentiments</title>
+    <style>
+        .hidden {
+            display: none;
+        }
+        .indented-paragraph {
+            text-indent: 2em;
+            margin-bottom: 1em;
+        }
+        .center-text {
+            text-align: center;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+        }
+        pre {
+            white-space: pre-wrap;
+            white-space: -moz-pre-wrap;
+            white-space: -pre-wrap;
+            white-space: -o-pre-wrap;
+            word-wrap: break-word;
+        }
+        ul{
+            padding-left: 20px;
+        }
+        #buttonsContainer {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 20px;
+        }
+    </style>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        function toggleVisibility(sectionId) {
+            const sections = ['text-section', 'keywords-section', 'wordSearch-section'];
+            const targetSection = document.getElementById(sectionId);
+
+            if (targetSection.style.display === 'none') {
+                targetSection.style.display = 'block';
+            } else {
+                targetSection.style.display = 'none';
+            }
+
+            for (const section of sections) {
+                if (section !== sectionId) {
+                    document.getElementById(section).style.display = 'none';
+                }
+            }
+        }
+
+        function toggleKeywords() {
+        let table = document.getElementById("keywordsTable");
+        if (table.style.display === "none") {
+            // Clear the table body
+            let tbody = table.getElementsByTagName("tbody")[0];
+            tbody.innerHTML = "";
+            // Populate the table
+            let rank = 1;
+            for (const keyword of keywords) {
+                let row = tbody.insertRow();
+                let rankCell = row.insertCell(0);
+                let keywordCell = row.insertCell(1);
+                let countCell = row.insertCell(2);
+                rankCell.innerText = rank;
+                keywordCell.innerText = keyword.word;
+                countCell.innerText = keyword.count;
+                rank++;
+            }
+            table.style.display = "table";
+        } else {
+            table.style.display = "none";
+        }
+    }
+
+        function getWordInfo() {
+            let word = document.getElementById("word").value;
+            if (word === "") {
+                alert("Please enter a word.");
+                return;
+            }
+            fetch(`/word-info?word=${word}`)
+                .then(response => response.json())
+                .then(data => {
+                    let wordInfo = document.getElementById("wordInfo");
+                    wordInfo.innerHTML = `Count: ${data.count}, Ranking: ${data.ranking}`;
+                });
+        }
+        
+        let currentSentenceIndex = 0;
+      
+        function displaySentence() {
+          const sentences = $("#sentences").data("sentences");
+          const sentence = sentences[currentSentenceIndex];
+          $("#sentence").text(sentence);
+        }
+      
+        function updateSentences(word) {
+          $.getJSON("/sentences_with_word", { word: word }, function (data) {
+            $("#sentences").data("sentences", data.sentences);
+            currentSentenceIndex = 0;
+            displaySentence();
+          });
+        }
+      
+        $(document).ready(function () {
+            $("#get-word-info").on("click", function () {
+            const word = $("#word").val();
+            updateSentences(word);
+          });
+
+          $("#left-clicker").on("click", function () {
+            const sentences = $("#sentences").data("sentences");
+            if (sentences.length > 0) {
+              currentSentenceIndex = (currentSentenceIndex - 1 + sentences.length) % sentences.length;
+              displaySentence();
+            }
+          });
+
+          $("#right-clicker").on("click", function () {
+            const sentences = $("#sentences").data("sentences");
+            if (sentences.length > 0) {
+              currentSentenceIndex = (currentSentenceIndex + 1) % sentences.length;
+              displaySentence();
+            }
+          });
+        });
+    </script>
+</head>
+<body>
+    <h1>Document Sentiments</h1>
+    <div id="buttonsContainer">
+        <button onclick="toggleVisibility('text-section')">Toggle Text</button>
+        <button onclick="toggleVisibility('keywords-section')">Toggle Keywords</button>
+        <button onclick="toggleVisibility('wordSearch-section')">Toggle Word Search</button>
+    </div>
+
+    <div id="text-section" class="center-text" class="text-break" style="display: none;">
+        <h2>Text</h2>
+        <pre>{{ text | safe }}</pre>
+    </div>
+    <div id="keywords-section" style="display: none;">
+        <h2>Keywords</h2>
+        <table id="keywordsTable" style="display: none; margin-left: auto; margin-right: auto;">
+            <thead>
+                <tr>
+                    <th>Rank</th>
+                    <th>Keyword</th>
+                    <th>Occurrences</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+    <div id="wordSearch-section" style="display: none;">
+        <label for="word">Word:</label>
+        <input type="text" id="word" name="word">
+        <button id="get-word-info">Get word info</button>
+        <div id="wordInfo"></div>
+        <p id="sentences" style="display: none;"></p>
+        <p id="sentence"></p>
+        <button id="left-clicker">&lt;</button>
+        <button id="right-clicker">&gt;</button>
+    </div>
+</body>
+</html>
