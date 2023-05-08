@@ -39,7 +39,7 @@ The application is built using Python with the Flask web framework. The frontend
 
 The application is organized into the following components:
 
-- `app.py`: The main Flask application file.
+- `FileHandler.py`: The main application file.
 - `templates/`: The directory containing the HTML templates.
 - `static/`: The directory containing static files, such as CSS and JavaScript files.
 
