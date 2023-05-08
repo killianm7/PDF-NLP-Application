@@ -111,6 +111,8 @@ def login_user():
     password = request.form['password']
     if check_credentials(email, password):
         session['logged_in'] = True
+        session['email'] = email
+        session['password'] = password
         return redirect(url_for('upload'))
     else:
         flash('Invalid email or password')
@@ -160,6 +162,7 @@ def login():
         if check_credentials(email, password):
             session['logged_in'] = True
             session['email'] = email
+            session['password'] = password
             return redirect(url_for('upload'))
         else:
             flash('Invalid email or password')
@@ -187,8 +190,12 @@ def handleUpload():
         keywords_dict = extract_keywords(text)
         sentences = split_into_sentences(text)
 
-        email = session['email']
-        password = session['password']
+        email = session.get('email')
+        password = session.get('password')
+        if not email or not password:
+            flash("Please log in to access this feature.")
+            return redirect(url_for('login'))
+        
         user_info = {"Email": email, "Password": password}
 
         
@@ -200,7 +207,9 @@ def handleUpload():
         session['keywords_dict'] = keywords_dict
         session['sentences'] = sentences
 
-        return render_template('display_data.html', text=text, paragraphs=paragraphs, keywords=list(keywords_dict.keys()))
+        sorted_keywords = sorted(keywords_dict.items(), key=lambda x: x[1], reverse=True)
+
+        return render_template('display_data.html', text=text, paragraphs=paragraphs, keywords=sorted_keywords, keywords_dict=keywords_dict, enumerate=enumerate)
 
     return redirect(url_for('upload'))
 
@@ -224,12 +233,6 @@ def word_info():
     ranking = [i for i, kw in enumerate(sorted_keywords) if kw[0] == word]
     
     return jsonify({"count": count, "ranking": ranking[0] + 1 if ranking else 0})
-
-def toggle_word_info():
-    if word_input_group.style.display == 'none':
-        word_input_group.style.display = 'block'
-    else:
-        word_input_group.style.display = 'none'
 
 @app.route('/sentences_with_word', methods=['GET'])
 def sentences_with_word():
