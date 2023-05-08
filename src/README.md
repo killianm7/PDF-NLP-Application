@@ -80,6 +80,7 @@ To run the tests for this application, follow these steps:
 
 ```bash
 pip install pytest
+```
 
 2. Utilize the file `test_FileHandler.py` to run tests on `FileHandler.py`. You can add more tests to the `test_FileHandler.py` file as needed to cover other functions and scenarios in your `FileHandler.py` code.
 
@@ -91,3 +92,4 @@ pytest
 # OR
 
 pytest test_FileHandler.py
+```
